@@ -1,12 +1,12 @@
 ---
-title: marimo app template
+title: E-Commerce ELT
 emoji: 🍃
 colorFrom: indigo
 colorTo: purple
 sdk: docker
 pinned: true
 license: mit
-short_description: Template for deploying a marimo application to HF
+short_description: Extract, Load, Transform Pipeline applied to an E-Commerce
 ---
 
 Check out marimo at <https://github.com/marimo-team/marimo>
