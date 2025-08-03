@@ -25,7 +25,7 @@ def get_public_holidays(url: str, year: str) -> DataFrame:
         data = DataFrame(response.json())
 
         # Drop the columns types and countries
-        df = data.drop(["types", "countries"], axis=1)
+        df = data.drop(["types", "counties"], axis=1)  # Miss spelling in the API
         # Convert the date column to datetime
         df["date"] = to_datetime(df["date"])
 
