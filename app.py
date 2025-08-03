@@ -20,31 +20,9 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    📘 Want a step-by-step walkthrough instead?
+    💡 Want a step-by-step walkthrough instead?
 
-    You can check the tutorial version of this app here: 👉 [Tutorial app](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.py)
-
-    Or the Jupyter notebook version here: 👉 [Jupyter version](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
-    """
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""## Table of Contents""")
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(
-        r"""
-    - [Description](#1-description)
-    - [ETL](#2-etl)
-        - [Extract & Load](#21-extract-and-load)
-        - [Transform](#22-transform)
-    - [Plots](#3-plots)
+    You can check the Jupyter notebook version here: 👉 [Jupyter version](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
     """
     )
     return

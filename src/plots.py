@@ -2,29 +2,37 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 from matplotlib import rc_file_defaults
+from matplotlib.figure import Figure
 from pandas import DataFrame, to_datetime
 
 
-def plot_revenue_by_month_year(df: DataFrame, year: int) -> None:
+def plot_revenue_by_month_year(df: DataFrame, year: int) -> Figure:
     """
-    Plot the revenue by month and year
+    Generate and return a matplotlib figure showing monthly revenue for a given year.
+
+    Designed to be used in interactive environments like Marimo, where the figure
+    will be rendered automatically when returned from a code cell.
 
     Args:
-        df (DataFrame): The dataframe
-        year (int): The year
+        df (DataFrame): DataFrame containing revenue data, with a column 'month'
+                        and a column named 'Year{year}' for the selected year.
+        year (int): The year to visualize (e.g., 2018).
+
+    Returns:
+        Figure: A matplotlib figure object with a line and bar chart overlay.
     """
     rc_file_defaults()
     sns.set_style(style="darkgrid", rc=None)
 
-    _, ax1 = plt.subplots(figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 6))
 
     sns.lineplot(data=df[f"Year{year}"], marker="o", sort=False, ax=ax1)
     ax2 = ax1.twinx()
-
     sns.barplot(data=df, x="month", y=f"Year{year}", alpha=0.5, ax=ax2)
+
     ax1.set_title(f"Revenue by month in {year}")
 
-    plt.show()
+    return fig
 
 
 def plot_real_vs_predicted_delivered_time(df: DataFrame, year: int) -> None:
