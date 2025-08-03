@@ -111,3 +111,14 @@ If your app is intended as a tutorial or learning resource, you can:
   if show_code.value:
       mo.ui.code(code)
   ```
+
+### Set Dark Theme
+
+Review the [documentation](https://docs.marimo.io/guides/configuration/theming/#forcing-dark-mode). In short, add the following snippet at the top of your main app file:
+
+```py
+# /// script
+# [tool.marimo.display]
+# theme = "dark"
+# ///
+```
