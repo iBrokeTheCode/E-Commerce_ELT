@@ -87,10 +87,11 @@ def _(mo):
 def _(Path, config, create_engine, extract, load):
     DB_PATH = Path(config.SQLITE_DB_ABSOLUTE_PATH)
 
-    if not DB_PATH.is_file():
-        print("Database not found. Starting ETL process...")
-        DB_PATH.touch()
-
+    if DB_PATH.exists() and DB_PATH.stat().st_size > 0:
+        print("Database found. Skipping ETL process.")
+        ENGINE = create_engine(f"sqlite:///{DB_PATH}", echo=False)
+    else:
+        print("Database not found or empty. Starting ETL process...")
         ENGINE = create_engine(f"sqlite:///{DB_PATH}", echo=False)
 
         csv_dataframes = extract(
@@ -101,9 +102,6 @@ def _(Path, config, create_engine, extract, load):
 
         load(dataframes=csv_dataframes, database=ENGINE)
         print("ETL process complete.")
-    else:
-        print("Database found. Skipping ETL process.")
-        ENGINE = create_engine(f"sqlite:///{DB_PATH}", echo=False)
     return (ENGINE,)
 
 
