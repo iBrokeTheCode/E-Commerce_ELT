@@ -127,7 +127,7 @@ def _(mo):
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
     revenue_by_month_year = query_results[QueryEnum.REVENUE_BY_MONTH_YEAR.value]
     revenue_by_month_year
-    return
+    return (revenue_by_month_year,)
 
 
 @app.cell
@@ -142,7 +142,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.TOP_10_REVENUE_CATEGORIES.value
     ]
     top_10_revenue_categories
-    return
+    return (top_10_revenue_categories,)
 
 
 @app.cell
@@ -157,7 +157,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.TOP_10_LEAST_REVENUE_CATEGORIES.value
     ]
     top_10_least_revenue_categories
-    return
+    return (top_10_least_revenue_categories,)
 
 
 @app.cell
@@ -170,7 +170,7 @@ def _(mo):
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
     revenue_per_state = query_results[QueryEnum.REVENUE_PER_STATE.value]
     revenue_per_state
-    return
+    return (revenue_per_state,)
 
 
 @app.cell
@@ -185,7 +185,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.DELIVERY_DATE_DIFFERENCE.value
     ]
     delivery_date_difference
-    return
+    return (delivery_date_difference,)
 
 
 @app.cell
@@ -200,7 +200,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.REAL_VS_ESTIMATED_DELIVERED_TIME.value
     ]
     real_vs_estimated_delivery_time
-    return
+    return (real_vs_estimated_delivery_time,)
 
 
 @app.cell
@@ -215,7 +215,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.GLOBAL_AMOUNT_ORDER_STATUS.value
     ]
     global_amount_order_status
-    return
+    return (global_amount_order_status,)
 
 
 @app.cell
@@ -230,7 +230,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.ORDERS_PER_DAY_AND_HOLIDAYS_2017.value
     ]
     orders_per_day_and_holidays
-    return
+    return (orders_per_day_and_holidays,)
 
 
 @app.cell
@@ -245,7 +245,7 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
         QueryEnum.GET_FREIGHT_VALUE_WEIGHT_RELATIONSHIP.value
     ]
     freight_value_weight_relationship
-    return
+    return (freight_value_weight_relationship,)
 
 
 @app.cell
@@ -255,13 +255,155 @@ def _(mo):
 
 
 @app.cell
+def _():
+    from src.plots import (
+        plot_revenue_by_month_year,
+        plot_real_vs_predicted_delivered_time,
+        plot_global_amount_order_status,
+        plot_revenue_per_state,
+        plot_top_10_least_revenue_categories,
+        plot_top_10_revenue_categories_amount,
+        plot_top_10_revenue_categories,
+        plot_freight_value_weight_relationship,
+        plot_delivery_date_difference,
+        plot_order_amount_per_day_with_holidays,
+    )
+    return (
+        plot_delivery_date_difference,
+        plot_freight_value_weight_relationship,
+        plot_global_amount_order_status,
+        plot_order_amount_per_day_with_holidays,
+        plot_real_vs_predicted_delivered_time,
+        plot_revenue_by_month_year,
+        plot_revenue_per_state,
+        plot_top_10_least_revenue_categories,
+        plot_top_10_revenue_categories,
+        plot_top_10_revenue_categories_amount,
+    )
+
+
+@app.cell
 def _(mo):
     mo.md(r"""**A. Revenue by Month in 2017**""")
     return
 
 
 @app.cell
-def _():
+def _(plot_revenue_by_month_year, revenue_by_month_year):
+    plot_revenue_by_month_year(df=revenue_by_month_year, year=2017)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**B. Real vs. Predicted Delivered Time**""")
+    return
+
+
+@app.cell
+def _(plot_real_vs_predicted_delivered_time, real_vs_estimated_delivery_time):
+    plot_real_vs_predicted_delivered_time(
+        df=real_vs_estimated_delivery_time, year=2017
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**C. Global Amount of Order Status**""")
+    return
+
+
+@app.cell
+def _(global_amount_order_status, plot_global_amount_order_status):
+    plot_global_amount_order_status(df=global_amount_order_status)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**D. Revenue per State**""")
+    return
+
+
+@app.cell
+def _(plot_revenue_per_state, revenue_per_state):
+    plot_revenue_per_state(df=revenue_per_state)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**E. Top 10 Least Revenue by Categories**""")
+    return
+
+
+@app.cell
+def _(plot_top_10_least_revenue_categories, top_10_least_revenue_categories):
+    plot_top_10_least_revenue_categories(df=top_10_least_revenue_categories)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**F. Top 10 Revenue Categories Amount**""")
+    return
+
+
+@app.cell
+def _(plot_top_10_revenue_categories_amount, top_10_revenue_categories):
+    plot_top_10_revenue_categories_amount(df=top_10_revenue_categories)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**G. Top 10 Revenue by Categories**""")
+    return
+
+
+@app.cell
+def _(plot_top_10_revenue_categories, top_10_revenue_categories):
+    plot_top_10_revenue_categories(df=top_10_revenue_categories)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**H. Freight Value vs. Product Weight**""")
+    return
+
+
+@app.cell
+def _(
+    freight_value_weight_relationship,
+    plot_freight_value_weight_relationship,
+):
+    plot_freight_value_weight_relationship(df=freight_value_weight_relationship)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**I. Diffrence Between Deliver Estimated Date and Delivery Date**""")
+    return
+
+
+@app.cell
+def _(delivery_date_difference, plot_delivery_date_difference):
+    plot_delivery_date_difference(df=delivery_date_difference)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**J. Order Amount per Day with Holidays**""")
+    return
+
+
+@app.cell
+def _(orders_per_day_and_holidays, plot_order_amount_per_day_with_holidays):
+    plot_order_amount_per_day_with_holidays(df=orders_per_day_and_holidays)
     return
 
 
