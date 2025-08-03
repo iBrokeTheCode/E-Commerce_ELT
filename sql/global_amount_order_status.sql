@@ -6,7 +6,7 @@
 -- 3. Group the results by the order status.
 SELECT
     oo.order_status,
-    COUNT(oo.order_status) AS Ammount
+    COUNT(oo.order_status) AS Amount
 FROM
     olist_orders oo
 GROUP BY
