@@ -79,56 +79,39 @@ def _():
 
 
 @app.cell
-def _(Path, config, create_engine):
-    # Create the sqlite database
-    Path(config.SQLITE_DB_ABSOLUTE_PATH).touch()
+def _(mo):
+    mo.md(r"""### 2.1 Extract and Load""")
+    return
 
-    # Create the database connection
-    ENGINE = create_engine(
-        r"sqlite:///{}".format(config.SQLITE_DB_ABSOLUTE_PATH), echo=False
-    )
+
+@app.cell
+def _(Path, config, create_engine, extract, load):
+    DB_PATH = Path(config.SQLITE_DB_ABSOLUTE_PATH)
+
+    if not DB_PATH.is_file():
+        # This block of code will only run once on a new deployment or if the file is deleted.
+        print("Database not found. Starting ETL process...")
+        DB_PATH.touch()
+
+        ENGINE = create_engine(f"sqlite:///{DB_PATH}", echo=False)
+
+        csv_dataframes = extract(
+            csv_folder=config.DATASET_ROOT_PATH,
+            csv_table_mapping=config.get_csv_to_table_mapping(),
+            public_holidays_url=config.PUBLIC_HOLIDAYS_URL,
+        )
+
+        load(dataframes=csv_dataframes, database=ENGINE)
+        print("ETL process complete.")
+    else:
+        print("Database found. Skipping ETL process.")
+        ENGINE = create_engine(f"sqlite:///{DB_PATH}", echo=False)
     return (ENGINE,)
 
 
 @app.cell
 def _(mo):
-    mo.md(r"""### 2.1 Extract""")
-    return
-
-
-@app.cell
-def _(config, extract):
-    csv_folder = config.DATASET_ROOT_PATH
-    public_holidays_url = config.PUBLIC_HOLIDAYS_URL
-
-    # Get the mapping of the csv files to the table names
-    csv_table_mapping = config.get_csv_to_table_mapping()
-
-    # Extract the data from the csv files, holidays and load them into the dataframes
-    csv_dataframes = extract(
-        csv_folder=csv_folder,
-        csv_table_mapping=csv_table_mapping,
-        public_holidays_url=public_holidays_url,
-    )
-    return (csv_dataframes,)
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""### 2.2 Load""")
-    return
-
-
-@app.cell
-def _(ENGINE, csv_dataframes, load):
-    # Store dataframes in SQLite database (our Data Warehouse in this case)
-    load(dataframes=csv_dataframes, database=ENGINE)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""### 2.3 Transform""")
+    mo.md(r"""### 2.2 Transform""")
     return
 
 
