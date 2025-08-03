@@ -119,7 +119,7 @@ def _(DataFrame, ENGINE, run_queries):
 
 @app.cell
 def _(mo):
-    mo.md(r"""#### 2.2.1 Revenue by Month and Year""")
+    mo.md(r"""**A. Revenue by Month and Year**""")
     return
 
 
@@ -127,6 +127,136 @@ def _(mo):
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
     revenue_by_month_year = query_results[QueryEnum.REVENUE_BY_MONTH_YEAR.value]
     revenue_by_month_year
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**B. Top 10 Revenue by categories**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    top_10_revenue_categories = query_results[
+        QueryEnum.TOP_10_REVENUE_CATEGORIES.value
+    ]
+    top_10_revenue_categories
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**C. Top 10 Least Revenue by Categories**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    top_10_least_revenue_categories = query_results[
+        QueryEnum.TOP_10_LEAST_REVENUE_CATEGORIES.value
+    ]
+    top_10_least_revenue_categories
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**D. Revenue per State**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    revenue_per_state = query_results[QueryEnum.REVENUE_PER_STATE.value]
+    revenue_per_state
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**E. Delivery Date Difference**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    delivery_date_difference = query_results[
+        QueryEnum.DELIVERY_DATE_DIFFERENCE.value
+    ]
+    delivery_date_difference
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**F. Real vs. Predicted Delivered Time**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    real_vs_estimated_delivery_time = query_results[
+        QueryEnum.REAL_VS_ESTIMATED_DELIVERED_TIME.value
+    ]
+    real_vs_estimated_delivery_time
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**G. Global Amount of Order Status**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    global_amount_order_status = query_results[
+        QueryEnum.GLOBAL_AMOUNT_ORDER_STATUS.value
+    ]
+    global_amount_order_status
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**H. Orders per Day and Holidays in 2017**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    orders_per_day_and_holidays = query_results[
+        QueryEnum.ORDERS_PER_DAY_AND_HOLIDAYS_2017.value
+    ]
+    orders_per_day_and_holidays
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**I. Freight Value Weight Relationship**""")
+    return
+
+
+@app.cell
+def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    freight_value_weight_relationship = query_results[
+        QueryEnum.GET_FREIGHT_VALUE_WEIGHT_RELATIONSHIP.value
+    ]
+    freight_value_weight_relationship
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 3. Plots""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**A. Revenue by Month in 2017**""")
     return
 
 
