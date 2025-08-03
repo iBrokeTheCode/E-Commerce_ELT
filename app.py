@@ -61,7 +61,6 @@ def _():
     from pathlib import Path
     from sqlalchemy import create_engine
 
-
     from src import config
     from src.extract import extract
     from src.load import load
@@ -89,7 +88,6 @@ def _(Path, config, create_engine, extract, load):
     DB_PATH = Path(config.SQLITE_DB_ABSOLUTE_PATH)
 
     if not DB_PATH.is_file():
-        # This block of code will only run once on a new deployment or if the file is deleted.
         print("Database not found. Starting ETL process...")
         DB_PATH.touch()
 
@@ -122,8 +120,13 @@ def _(DataFrame, ENGINE, run_queries):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""#### 2.2.1 Revenue by Month and Year""")
+    return
+
+
+@app.cell
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
-    # Transforming the revenue_by_month_year query to a table
     revenue_by_month_year = query_results[QueryEnum.REVENUE_BY_MONTH_YEAR.value]
     revenue_by_month_year
     return
