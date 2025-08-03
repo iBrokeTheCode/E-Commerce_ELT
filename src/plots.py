@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import plotly.express as px
+import plotly.graph_objects as go
 import seaborn as sns
 from matplotlib import rc_file_defaults
 from matplotlib.figure import Figure
@@ -35,42 +36,61 @@ def plot_revenue_by_month_year(df: DataFrame, year: int) -> Figure:
     return fig
 
 
-def plot_real_vs_predicted_delivered_time(df: DataFrame, year: int) -> None:
+def plot_real_vs_predicted_delivered_time(df: DataFrame, year: int) -> Figure:
     """
-    Plot the real vs predicted delivered time
+    Generate and return a matplotlib figure comparing real vs. estimated delivery time
+    by month for a specific year.
+
+    Intended for interactive environments like Marimo where returning the figure
+    automatically renders the plot.
 
     Args:
-        df (DataFrame): The dataframe
-        year (int): The year
+        df (DataFrame): DataFrame with columns:
+            - 'month': Month names or numbers.
+            - f'Year{year}_real_time': Real average delivery time.
+            - f'Year{year}_estimated_time': Estimated average delivery time.
+        year (int): The year to visualize (e.g., 2018).
+
+    Returns:
+        Figure: A matplotlib figure with two overlaid line plots.
     """
     rc_file_defaults()
     sns.set_style(style=None, rc=None)
 
-    _, ax1 = plt.subplots(figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 6))
 
     sns.lineplot(data=df[f"Year{year}_real_time"], marker="o", sort=False, ax=ax1)
-    ax1.twinx()
-    g = sns.lineplot(
-        data=df[f"Year{year}_estimated_time"], marker="o", sort=False, ax=ax1
-    )
-    g.set_xticks(range(len(df)))
-    g.set_xticklabels(df.month.values)
-    g.set(xlabel="month", ylabel="Average days delivery time", title="some title")
-    ax1.set_title(f"Average days delivery time by month in {year}")
-    ax1.legend(["Real time", "Estimated time"])
+    sns.lineplot(data=df[f"Year{year}_estimated_time"], marker="o", sort=False, ax=ax1)
 
-    plt.show()
+    ax1.set_xticks(range(len(df)))
+    ax1.set_xticklabels(df["month"].values)
+    ax1.set_xlabel("Month")
+    ax1.set_ylabel("Average Days to Deliver")
+    ax1.set_title(f"Average Delivery Time (Real vs Estimated) in {year}")
+    ax1.legend(["Real Time", "Estimated Time"])
+
+    return fig
 
 
-def plot_global_amount_order_status(df: DataFrame) -> None:
+from matplotlib.figure import Figure
+from pandas import DataFrame
+
+
+def plot_global_amount_order_status(df: DataFrame) -> Figure:
     """
-    Plot global amount of order status
+    Create and return a donut pie chart showing the global amount per order status.
 
     Args:
-        df (DataFrame): The dataframe
-    """
-    _, ax = plt.subplots(figsize=(8, 3), subplot_kw=dict(aspect="equal"))
+        df (DataFrame): DataFrame containing:
+            - 'order_status': Status labels (e.g., 'order delivered').
+            - 'Amount': Corresponding counts or totals per status.
 
+    Returns:
+        Figure: A matplotlib figure containing a pie (donut) chart with legend.
+    """
+    fig, ax = plt.subplots(figsize=(8, 3), subplot_kw=dict(aspect="equal"))
+
+    # Extract last word of each status for cleaner labels
     elements = [x.split()[-1] for x in df["order_status"]]
 
     wedges, autotexts = ax.pie(df["Amount"], textprops=dict(color="w"))
@@ -84,42 +104,51 @@ def plot_global_amount_order_status(df: DataFrame) -> None:
     )
 
     plt.setp(autotexts, size=8, weight="bold")
-
     ax.set_title("Order Status Total")
 
-    my_circle = plt.Circle((0, 0), 0.7, color="white")
-    p = plt.gcf()
-    p.gca().add_artist(my_circle)
+    # Add donut center
+    center_circle = plt.Circle((0, 0), 0.7, color="white")
+    ax.add_artist(center_circle)
 
-    plt.show()
+    return fig
 
 
-def plot_revenue_per_state(df: DataFrame) -> None:
+def plot_revenue_per_state(df: DataFrame) -> go.Figure:
     """
-    Plot revenue per state
+    Create a Plotly treemap to visualize revenue per customer state.
 
     Args:
-        df (DataFrame): The dataframe
+        df (DataFrame): DataFrame with columns:
+            - 'customer_state': State or region
+            - 'Revenue': Revenue value per state
+
+    Returns:
+        go.Figure: A Plotly treemap figure object.
     """
     fig = px.treemap(
         df, path=["customer_state"], values="Revenue", width=800, height=300
     )
     fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
-    fig.show()
+    return fig
 
 
-def plot_top_10_least_revenue_categories(df: DataFrame) -> None:
+def plot_top_10_least_revenue_categories(df: DataFrame) -> Figure:
     """
-    Plot top 10 least revenue categories
+    Create a donut pie chart showing the top 10 least revenue categories.
 
     Args:
-        df (DataFrame): The dataframe
+        df (DataFrame): DataFrame with columns:
+            - 'Category': Category name
+            - 'Revenue': Corresponding revenue values
+
+    Returns:
+        Figure: A matplotlib figure with a donut chart and legend.
     """
-    _, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
 
     elements = [x.split()[-1] for x in df["Category"]]
-
     revenue = df["Revenue"]
+
     wedges, autotexts = ax.pie(revenue, textprops=dict(color="w"))
 
     ax.legend(
@@ -131,27 +160,31 @@ def plot_top_10_least_revenue_categories(df: DataFrame) -> None:
     )
 
     plt.setp(autotexts, size=8, weight="bold")
-    my_circle = plt.Circle((0, 0), 0.7, color="white")
-    p = plt.gcf()
-    p.gca().add_artist(my_circle)
-
     ax.set_title("Top 10 Least Revenue Categories Amount")
 
-    plt.show()
+    center_circle = plt.Circle((0, 0), 0.7, color="white")
+    ax.add_artist(center_circle)
+
+    return fig
 
 
-def plot_top_10_revenue_categories_amount(df: DataFrame) -> None:
-    """Plot top 10 revenue categories
+def plot_top_10_revenue_categories_amount(df: DataFrame) -> Figure:
+    """
+    Create a donut pie chart showing the revenue distribution of the top 10 categories.
 
     Args:
-        df (DataFrame): Dataframe with top 10 revenue categories query result
+        df (DataFrame): DataFrame with columns:
+            - 'Category': Category name
+            - 'Revenue': Revenue amount
+
+    Returns:
+        Figure: A matplotlib figure object.
     """
-    # Plotting the top 10 revenue categories amount
-    _, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
 
     elements = [x.split()[-1] for x in df["Category"]]
-
     revenue = df["Revenue"]
+
     wedges, autotexts = ax.pie(revenue, textprops=dict(color="w"))
 
     ax.legend(
@@ -163,89 +196,107 @@ def plot_top_10_revenue_categories_amount(df: DataFrame) -> None:
     )
 
     plt.setp(autotexts, size=8, weight="bold")
-    my_circle = plt.Circle((0, 0), 0.7, color="white")
-    p = plt.gcf()
-    p.gca().add_artist(my_circle)
 
     ax.set_title("Top 10 Revenue Categories Amount")
 
-    plt.show()
+    center_circle = plt.Circle((0, 0), 0.7, color="white")
+    ax.add_artist(center_circle)
+
+    return fig
 
 
-def plot_top_10_revenue_categories(df: DataFrame) -> None:
-    """Plot top 10 revenue categories
+def plot_top_10_revenue_categories(df: DataFrame) -> go.Figure:
+    """
+    Create a Plotly treemap showing the number of orders for the top 10 revenue categories.
 
     Args:
-        df (DataFrame): Dataframe with top 10 revenue categories query result
+        df (DataFrame): DataFrame with columns:
+            - 'Category': Category name
+            - 'Num_order': Number of orders per category
+
+    Returns:
+        go.Figure: A Plotly treemap figure object.
     """
     fig = px.treemap(df, path=["Category"], values="Num_order", width=800, height=400)
     fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
-    fig.show()
+    return fig
 
 
-def plot_freight_value_weight_relationship(df: DataFrame) -> None:
-    """Plot freight value weight relationship
+def plot_freight_value_weight_relationship(df: DataFrame) -> Figure:
+    """
+    Plot the relationship between product weight and freight value using a scatter plot.
 
     Args:
-        df (DataFrame): Dataframe with freight value weight relationship query result
-    """
-    # Set the figure size
-    plt.figure(figsize=(8, 4))
+        df (DataFrame): DataFrame with columns:
+            - 'product_weight_g': Weight of the product in grams
+            - 'freight_value': Freight value in dollars
 
-    # Scatter plot: x=product weight, y=freight value
+    Returns:
+        Figure: A matplotlib figure object.
+    """
+    fig, ax = plt.subplots(figsize=(8, 4))
+
     sns.scatterplot(
-        data=df,
-        x="product_weight_g",
-        y="freight_value",
-        edgecolor="white",
+        data=df, x="product_weight_g", y="freight_value", edgecolor="white", ax=ax
     )
 
-    # Customize chart
-    plt.title("Freight Value vs Product Weight")
-    plt.xlabel("Product Weight (g)")
-    plt.ylabel("Freight Value ($)")
-    plt.tight_layout()
-    plt.show()
+    ax.set_title("Freight Value vs Product Weight")
+    ax.set_xlabel("Product Weight (g)")
+    ax.set_ylabel("Freight Value ($)")
+    fig.tight_layout()
+
+    return fig
 
 
-def plot_delivery_date_difference(df: DataFrame) -> None:
-    """Plot delivery date difference
+def plot_delivery_date_difference(df: DataFrame) -> Figure:
+    """
+    Plot the difference between estimated and actual delivery dates, grouped by state.
 
     Args:
-        df (DataFrame): Dataframe with delivery date difference query result
+        df (DataFrame): DataFrame with columns:
+            - 'Delivery_Difference': Difference in days
+            - 'State': Destination state
+
+    Returns:
+        Figure: A matplotlib figure object.
     """
-    plt.figure(figsize=(12, 6))
-    sns.barplot(data=df, x="Delivery_Difference", y="State").set(
-        title="Difference Between Delivery Estimate Date and Delivery Date"
-    )
-    plt.show()
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    sns.barplot(data=df, x="Delivery_Difference", y="State", ax=ax)
+    ax.set_title("Difference Between Delivery Estimate Date and Delivery Date")
+    ax.set_xlabel("Delivery Difference (days)")
+    ax.set_ylabel("State")
+
+    fig.tight_layout()
+    return fig
 
 
-def plot_order_amount_per_day_with_holidays(df: DataFrame) -> None:
-    """Plot order amount per day with holidays
+def plot_order_amount_per_day_with_holidays(df: DataFrame) -> Figure:
+    """
+    Plot the number of orders per day, highlighting holidays with vertical lines.
 
     Args:
-        df (DataFrame): Dataframe with order amount per day with holidays query result
-    """
+        df (DataFrame): DataFrame with columns:
+            - 'date': Timestamp in milliseconds
+            - 'order_count': Number of orders on that date
+            - 'holiday': Boolean indicating if the date is a holiday
 
-    # Convert timestamp in milliseconds to datetime
+    Returns:
+        Figure: A matplotlib figure object.
+    """
+    df = df.copy()
     df["date"] = to_datetime(df["date"], unit="ms")
-
-    # Sort by date
     df = df.sort_values("date")
 
-    # Plot the line chart for order count
-    plt.figure(figsize=(9, 4))
-    plt.plot(df["date"], df["order_count"], color="green")
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.plot(df["date"], df["order_count"], color="green")
 
-    # Add vertical lines for holidays
-    holidays = df[df["holiday"] == True]
-    for holiday_date in holidays["date"]:
-        plt.axvline(holiday_date, color="blue", linestyle="dotted", alpha=0.6)
+    for holiday_date in df[df["holiday"]]["date"]:
+        ax.axvline(holiday_date, color="blue", linestyle="dotted", alpha=0.6)
 
-    # Customize chart
-    plt.title("Order Amount per Day with Holidays")
-    plt.xlabel("Date")
-    plt.ylabel("Order Count")
-    plt.tight_layout()
-    plt.show()
+    ax.set_title("Order Amount per Day with Holidays")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Order Count")
+    fig.tight_layout()
+
+    return fig
