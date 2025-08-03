@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.14.16"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -44,7 +44,6 @@ def _(mo):
     * **Delivery:** Delivery performance, including time-to-delivery and its correlation with public holidays.
 
     The data pipeline processes information from multiple CSV files and a public API, storing and analyzing the results using Python. The final interactive report is presented as a Hugging Face Space built with Marimo.
-
     """
     )
     return

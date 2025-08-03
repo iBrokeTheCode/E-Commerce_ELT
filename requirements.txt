@@ -1,2 +1,4 @@
 marimo==0.14.16
 ruff==0.12.7
+requests==2.32.4
+pandas==2.3.1
