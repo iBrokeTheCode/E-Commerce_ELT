@@ -88,7 +88,7 @@ def plot_global_amount_order_status(df: DataFrame) -> Figure:
     Returns:
         Figure: A matplotlib figure containing a pie (donut) chart with legend.
     """
-    fig, ax = plt.subplots(figsize=(8, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(figsize=(12, 4), subplot_kw=dict(aspect="equal"))
 
     # Extract last word of each status for cleaner labels
     elements = [x.split()[-1] for x in df["order_status"]]
@@ -144,7 +144,7 @@ def plot_top_10_least_revenue_categories(df: DataFrame) -> Figure:
     Returns:
         Figure: A matplotlib figure with a donut chart and legend.
     """
-    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(figsize=(12, 4), subplot_kw=dict(aspect="equal"))
 
     elements = [x.split()[-1] for x in df["Category"]]
     revenue = df["Revenue"]
@@ -180,7 +180,7 @@ def plot_top_10_revenue_categories_amount(df: DataFrame) -> Figure:
     Returns:
         Figure: A matplotlib figure object.
     """
-    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(figsize=(12, 4), subplot_kw=dict(aspect="equal"))
 
     elements = [x.split()[-1] for x in df["Category"]]
     revenue = df["Revenue"]
@@ -260,7 +260,7 @@ def plot_delivery_date_difference(df: DataFrame) -> Figure:
     Returns:
         Figure: A matplotlib figure object.
     """
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     sns.barplot(data=df, x="Delivery_Difference", y="State", ax=ax)
     ax.set_title("Difference Between Delivery Estimate Date and Delivery Date")

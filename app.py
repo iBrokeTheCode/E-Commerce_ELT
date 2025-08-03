@@ -7,6 +7,11 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
+
+    # /// script
+    # [tool.marimo.display]
+    # theme = "dark"
+    # ///
     return (mo,)
 
 
