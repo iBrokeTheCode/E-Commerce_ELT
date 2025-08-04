@@ -23,9 +23,9 @@ def plot_revenue_by_month_year(df: DataFrame, year: int) -> Figure:
         Figure: A matplotlib figure object with a line and bar chart overlay.
     """
     rc_file_defaults()
-    sns.set_style(style="darkgrid", rc=None)
+    sns.set_style(style=None, rc=None)
 
-    fig, ax1 = plt.subplots(figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 4))
 
     sns.lineplot(data=df[f"Year{year}"], marker="o", sort=False, ax=ax1)
     ax2 = ax1.twinx()
@@ -57,7 +57,7 @@ def plot_real_vs_predicted_delivered_time(df: DataFrame, year: int) -> Figure:
     rc_file_defaults()
     sns.set_style(style=None, rc=None)
 
-    fig, ax1 = plt.subplots(figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 4))
 
     sns.lineplot(data=df[f"Year{year}_real_time"], marker="o", sort=False, ax=ax1)
     sns.lineplot(data=df[f"Year{year}_estimated_time"], marker="o", sort=False, ax=ax1)

@@ -26,19 +26,15 @@ def _(mo):
     mo.md(
         r"""
     This interactive dashboard explores insights from the [Brazilian e-commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and the [Public Holiday API](https://date.nager.at/Api) :
+
     - Sales performance by category and state
     - Delivery efficiency
     - Seasonal trends and holidays impact
 
-    Use the tabs above to explore different insights!
+    _Built with [Marimo](https://marimo.io)._
 
-    _Built with Marimo._
-
-    ---
-
-    💡 **Want a step-by-step walkthrough instead?**
-
-    You can check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
+    > 💡 **Want a step-by-step walkthrough instead?**   
+    > Check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
     """
     )
     return
@@ -46,6 +42,8 @@ def _(mo):
 
 @app.cell
 def _():
+    # 📌 IMPORT LIBRARIES AND PACKAGES
+
     from pandas import DataFrame
     from pathlib import Path
     from sqlalchemy import create_engine
@@ -90,6 +88,8 @@ def _():
 
 @app.cell
 def _(DataFrame, Path, config, create_engine, extract, load, run_queries):
+    # 📌 LOAD SQLITE DATABASE
+
     DB_PATH = Path(config.SQLITE_DB_ABSOLUTE_PATH)
 
     if DB_PATH.exists() and DB_PATH.stat().st_size > 0:
@@ -114,43 +114,36 @@ def _(DataFrame, Path, config, create_engine, extract, load, run_queries):
 
 @app.cell
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
-    # **A. Revenue by Month and Year**
+    # 📌 RETRIEVE RELEVANT DATA FROM DATABASE
+
     revenue_by_month_year = query_results[QueryEnum.REVENUE_BY_MONTH_YEAR.value]
 
-    # **B. Top 10 Revenue by categories**
     top_10_revenue_categories = query_results[
         QueryEnum.TOP_10_REVENUE_CATEGORIES.value
     ]
 
-    # **C. Top 10 Least Revenue by Categories**
     top_10_least_revenue_categories = query_results[
         QueryEnum.TOP_10_LEAST_REVENUE_CATEGORIES.value
     ]
 
-    # **D. Revenue per State**
     revenue_per_state = query_results[QueryEnum.REVENUE_PER_STATE.value]
 
-    # **E. Delivery Date Difference**
     delivery_date_difference = query_results[
         QueryEnum.DELIVERY_DATE_DIFFERENCE.value
     ]
 
-    # **F. Real vs. Predicted Delivered Time**
     real_vs_estimated_delivery_time = query_results[
         QueryEnum.REAL_VS_ESTIMATED_DELIVERED_TIME.value
     ]
 
-    # **G. Global Amount of Order Status**
     global_amount_order_status = query_results[
         QueryEnum.GLOBAL_AMOUNT_ORDER_STATUS.value
     ]
 
-    # **H. Orders per Day and Holidays in 2017**
     orders_per_day_and_holidays = query_results[
         QueryEnum.ORDERS_PER_DAY_AND_HOLIDAYS_2017.value
     ]
 
-    # **I. Freight Value Weight Relationship**
     freight_value_weight_relationship = query_results[
         QueryEnum.GET_FREIGHT_VALUE_WEIGHT_RELATIONSHIP.value
     ]
@@ -168,7 +161,142 @@ def _(QueryEnum, query_results: "dict[str, DataFrame]"):
 
 @app.cell
 def _(mo):
-    mo.md(r"""## Insights""")
+    mo.Html("<br><hr><br>")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""# 📈 Insights""")
+    return
+
+
+@app.cell
+def _(mo):
+    # 📌 TODO: Retrieve real data
+
+    st1 = mo.stat(
+        label="Total Revenue 2017",
+        bordered=True,
+        value=f"${2_000_000:,}",
+        caption=f"Previous year: ${1_500_000:,}",
+        direction="increase",
+    )
+    st2 = mo.stat(
+        label="Successful Deliveries",
+        bordered=True,
+        value=f"{1_280_700:,}",
+        caption="Review chart for more details",
+        direction="increase",
+    )
+    st3 = mo.stat(
+        label="Uncompleted Orders",
+        bordered=True,
+        value=f"{80_700:,}",
+        caption="Review chart for more details",
+        direction="decrease",
+    )
+    st4 = mo.stat(
+        label="Category with greater revenue",
+        bordered=True,
+        value=f"{'bed_bath_table'.replace('_', ' ').title()}",
+        caption=f"${884_220:,}",
+        direction="increase",
+    )
+
+    mo.hstack([st1, st2, st3, st4], widths="equal", gap=1)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.Html("<br><hr><br>")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""# 📋 Tables""")
+    return
+
+
+@app.cell
+def _(
+    freight_value_weight_relationship,
+    global_amount_order_status,
+    mo,
+    orders_per_day_and_holidays,
+    real_vs_estimated_delivery_time,
+    revenue_by_month_year,
+    revenue_per_state,
+    top_10_least_revenue_categories,
+    top_10_revenue_categories,
+):
+    overview_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Global Order Status Overview")),
+            global_amount_order_status,
+        ],
+    )
+    revenue_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Revenue by Month and Year")),
+            revenue_by_month_year,
+            mo.center(mo.md("## Revenue by State")),
+            revenue_per_state,
+        ],
+    )
+    categories_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Top 10 Revenue Categories")),
+            top_10_revenue_categories,
+            mo.center(mo.md("## Bottom 10 Revenue Categories")),
+            top_10_least_revenue_categories,
+        ],
+    )
+    delivery_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Freight Value vs Product Weight")),
+            freight_value_weight_relationship,
+            mo.center(mo.md("## Real vs Estimated Delivery Time")),
+            real_vs_estimated_delivery_time,
+            mo.center(mo.md("## Orders and Holidays")),
+            orders_per_day_and_holidays,
+        ],
+    )
+
+    mo.ui.tabs(
+        {
+            "📊 Overview": overview_table_tab,
+            "💰 Revenue": revenue_table_tab,
+            "📦 Categories": categories_table_tab,
+            "🚚 Freight & Delivery": delivery_table_tab,
+        }
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.Html("<br><hr><br>")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""# 📊 Charts""")
     return
 
 
@@ -194,56 +322,58 @@ def _(
     top_10_revenue_categories,
 ):
     overview_tab = mo.vstack(
-        [
-            mo.md("### Global Order Status Overview"),
-            mo.hstack(
-                [
-                    global_amount_order_status,
-                    plot_global_amount_order_status(df=global_amount_order_status),
-                ]
-            ),
-        ]
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Global Order Status Overview")),
+            plot_global_amount_order_status(df=global_amount_order_status),
+        ],
     )
 
     revenue_tab = mo.vstack(
-        [
-            mo.md("### Revenue by Month and Year"),
-            mo.ui.table(revenue_by_month_year),
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Revenue by Month and Year")),
             plot_revenue_by_month_year(df=revenue_by_month_year, year=2017),
-            mo.md("### Revenue by State"),
-            mo.ui.table(revenue_per_state),
+            mo.center(mo.md("## Revenue by State")),
             plot_revenue_per_state(revenue_per_state),
-        ]
+        ],
     )
 
     categories_tab = mo.vstack(
-        [
-            mo.md("### Top 10 Revenue Categories"),
-            mo.ui.table(top_10_revenue_categories),
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Top 10 Revenue Categories")),
             plot_top_10_revenue_categories(top_10_revenue_categories),
+            mo.center(mo.md("## Top 10 Revenue Categories by Amount")),
             plot_top_10_revenue_categories_amount(top_10_revenue_categories),
-            mo.md("### Bottom 10 Revenue Categories"),
-            mo.ui.table(top_10_least_revenue_categories),
+            mo.center(mo.md("## Bottom 10 Revenue Categories")),
             plot_top_10_least_revenue_categories(top_10_least_revenue_categories),
-        ]
+        ],
     )
 
     delivery_tab = mo.vstack(
-        [
-            mo.md("### Freight Value vs Product Weight"),
-            mo.ui.table(freight_value_weight_relationship),
+        gap=2,
+        justify="center",
+        align="center",
+        heights="equal",
+        items=[
+            mo.center(mo.md("## Freight Value vs Product Weight")),
             plot_freight_value_weight_relationship(
                 freight_value_weight_relationship
             ),
-            mo.md("### Real vs Estimated Delivery Time"),
-            mo.ui.table(real_vs_estimated_delivery_time),
+            mo.center(mo.md("## Real vs Estimated Delivery Time")),
             plot_real_vs_predicted_delivered_time(
                 df=real_vs_estimated_delivery_time, year=2017
             ),
-            mo.md("### Orders and Holidays"),
-            mo.ui.table(orders_per_day_and_holidays),
+            mo.center(mo.md("## Orders and Holidays")),
             plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays),
-        ]
+        ],
     )
     return categories_tab, delivery_tab, overview_tab, revenue_tab
 
@@ -258,11 +388,6 @@ def _(categories_tab, delivery_tab, mo, overview_tab, revenue_tab):
             "🚚 Freight & Delivery": delivery_tab,
         }
     )
-    return
-
-
-@app.cell
-def _():
     return
 
 
