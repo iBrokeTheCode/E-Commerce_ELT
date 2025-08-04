@@ -17,7 +17,7 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md(r"""# E-Commerce ELT Pipeline""")
+    mo.md(r"""# 📦 Brazilian E-Commerce Dashboard""")
     return
 
 
@@ -25,38 +25,22 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    💡 Want a step-by-step walkthrough instead?
+    This interactive dashboard explores insights from the [Brazilian e-commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and the [Public Holiday API](https://date.nager.at/Api) :
+    - Sales performance by category and state
+    - Delivery efficiency
+    - Seasonal trends and holidays impact
 
-    You can check the Jupyter notebook version here: 👉 [Jupyter version](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
+    Use the tabs above to explore different insights!
+
+    _Built with Marimo._
+
+    ---
+
+    💡 **Want a step-by-step walkthrough instead?**
+
+    You can check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
     """
     )
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""## 1. Description""")
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(
-        r"""
-    This project analyzes e-commerce data from a Brazilian marketplace to explore key business metrics related to **revenue** and **delivery performance**. Using an interactive Marimo application, the analysis provides insights into:
-
-    * **Revenue:** Annual revenue, popular product categories, and sales by state.
-    * **Delivery:** Delivery performance, including time-to-delivery and its correlation with public holidays.
-
-    The data pipeline processes information from multiple CSV files and a public API, storing and analyzing the results using Python. The final interactive report is presented as a Hugging Face Space built with Marimo.
-    """
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""## 2. ETL""")
     return
 
 
@@ -70,6 +54,19 @@ def _():
     from src.extract import extract
     from src.load import load
     from src.transform import QueryEnum, run_queries
+
+    from src.plots import (
+        plot_revenue_by_month_year,
+        plot_real_vs_predicted_delivered_time,
+        plot_global_amount_order_status,
+        plot_revenue_per_state,
+        plot_top_10_least_revenue_categories,
+        plot_top_10_revenue_categories_amount,
+        plot_top_10_revenue_categories,
+        plot_freight_value_weight_relationship,
+        plot_delivery_date_difference,
+        plot_order_amount_per_day_with_holidays,
+    )
     return (
         DataFrame,
         Path,
@@ -78,18 +75,21 @@ def _():
         create_engine,
         extract,
         load,
+        plot_freight_value_weight_relationship,
+        plot_global_amount_order_status,
+        plot_order_amount_per_day_with_holidays,
+        plot_real_vs_predicted_delivered_time,
+        plot_revenue_by_month_year,
+        plot_revenue_per_state,
+        plot_top_10_least_revenue_categories,
+        plot_top_10_revenue_categories,
+        plot_top_10_revenue_categories_amount,
         run_queries,
     )
 
 
 @app.cell
-def _(mo):
-    mo.md(r"""### 2.1 Extract and Load""")
-    return
-
-
-@app.cell
-def _(Path, config, create_engine, extract, load):
+def _(DataFrame, Path, config, create_engine, extract, load, run_queries):
     DB_PATH = Path(config.SQLITE_DB_ABSOLUTE_PATH)
 
     if DB_PATH.exists() and DB_PATH.stat().st_size > 0:
@@ -107,308 +107,157 @@ def _(Path, config, create_engine, extract, load):
 
         load(dataframes=csv_dataframes, database=ENGINE)
         print("ETL process complete.")
-    return (ENGINE,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""### 2.2 Transform""")
-    return
-
-
-@app.cell
-def _(DataFrame, ENGINE, run_queries):
     query_results: dict[str, DataFrame] = run_queries(database=ENGINE)
     return (query_results,)
 
 
 @app.cell
-def _(mo):
-    mo.md(r"""**A. Revenue by Month and Year**""")
-    return
-
-
-@app.cell
 def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **A. Revenue by Month and Year**
     revenue_by_month_year = query_results[QueryEnum.REVENUE_BY_MONTH_YEAR.value]
-    revenue_by_month_year
-    return (revenue_by_month_year,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**B. Top 10 Revenue by categories**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **B. Top 10 Revenue by categories**
     top_10_revenue_categories = query_results[
         QueryEnum.TOP_10_REVENUE_CATEGORIES.value
     ]
-    top_10_revenue_categories
-    return (top_10_revenue_categories,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**C. Top 10 Least Revenue by Categories**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **C. Top 10 Least Revenue by Categories**
     top_10_least_revenue_categories = query_results[
         QueryEnum.TOP_10_LEAST_REVENUE_CATEGORIES.value
     ]
-    top_10_least_revenue_categories
-    return (top_10_least_revenue_categories,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**D. Revenue per State**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **D. Revenue per State**
     revenue_per_state = query_results[QueryEnum.REVENUE_PER_STATE.value]
-    revenue_per_state
-    return (revenue_per_state,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**E. Delivery Date Difference**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **E. Delivery Date Difference**
     delivery_date_difference = query_results[
         QueryEnum.DELIVERY_DATE_DIFFERENCE.value
     ]
-    delivery_date_difference
-    return (delivery_date_difference,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**F. Real vs. Predicted Delivered Time**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **F. Real vs. Predicted Delivered Time**
     real_vs_estimated_delivery_time = query_results[
         QueryEnum.REAL_VS_ESTIMATED_DELIVERED_TIME.value
     ]
-    real_vs_estimated_delivery_time
-    return (real_vs_estimated_delivery_time,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**G. Global Amount of Order Status**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **G. Global Amount of Order Status**
     global_amount_order_status = query_results[
         QueryEnum.GLOBAL_AMOUNT_ORDER_STATUS.value
     ]
-    global_amount_order_status
-    return (global_amount_order_status,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**H. Orders per Day and Holidays in 2017**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **H. Orders per Day and Holidays in 2017**
     orders_per_day_and_holidays = query_results[
         QueryEnum.ORDERS_PER_DAY_AND_HOLIDAYS_2017.value
     ]
-    orders_per_day_and_holidays
-    return (orders_per_day_and_holidays,)
 
-
-@app.cell
-def _(mo):
-    mo.md(r"""**I. Freight Value Weight Relationship**""")
-    return
-
-
-@app.cell
-def _(QueryEnum, query_results: "dict[str, DataFrame]"):
+    # **I. Freight Value Weight Relationship**
     freight_value_weight_relationship = query_results[
         QueryEnum.GET_FREIGHT_VALUE_WEIGHT_RELATIONSHIP.value
     ]
-    freight_value_weight_relationship
-    return (freight_value_weight_relationship,)
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""## 3. Plots""")
-    return
-
-
-@app.cell
-def _():
-    from src.plots import (
-        plot_revenue_by_month_year,
-        plot_real_vs_predicted_delivered_time,
-        plot_global_amount_order_status,
-        plot_revenue_per_state,
-        plot_top_10_least_revenue_categories,
-        plot_top_10_revenue_categories_amount,
-        plot_top_10_revenue_categories,
-        plot_freight_value_weight_relationship,
-        plot_delivery_date_difference,
-        plot_order_amount_per_day_with_holidays,
-    )
     return (
-        plot_delivery_date_difference,
-        plot_freight_value_weight_relationship,
-        plot_global_amount_order_status,
-        plot_order_amount_per_day_with_holidays,
-        plot_real_vs_predicted_delivered_time,
-        plot_revenue_by_month_year,
-        plot_revenue_per_state,
-        plot_top_10_least_revenue_categories,
-        plot_top_10_revenue_categories,
-        plot_top_10_revenue_categories_amount,
+        freight_value_weight_relationship,
+        global_amount_order_status,
+        orders_per_day_and_holidays,
+        real_vs_estimated_delivery_time,
+        revenue_by_month_year,
+        revenue_per_state,
+        top_10_least_revenue_categories,
+        top_10_revenue_categories,
     )
 
 
 @app.cell
 def _(mo):
-    mo.md(r"""**A. Revenue by Month in 2017**""")
-    return
-
-
-@app.cell
-def _(plot_revenue_by_month_year, revenue_by_month_year):
-    plot_revenue_by_month_year(df=revenue_by_month_year, year=2017)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**B. Real vs. Predicted Delivered Time**""")
-    return
-
-
-@app.cell
-def _(plot_real_vs_predicted_delivered_time, real_vs_estimated_delivery_time):
-    plot_real_vs_predicted_delivered_time(
-        df=real_vs_estimated_delivery_time, year=2017
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**C. Global Amount of Order Status**""")
-    return
-
-
-@app.cell
-def _(global_amount_order_status, plot_global_amount_order_status):
-    plot_global_amount_order_status(df=global_amount_order_status)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**D. Revenue per State**""")
-    return
-
-
-@app.cell
-def _(plot_revenue_per_state, revenue_per_state):
-    plot_revenue_per_state(df=revenue_per_state)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**E. Top 10 Least Revenue by Categories**""")
-    return
-
-
-@app.cell
-def _(plot_top_10_least_revenue_categories, top_10_least_revenue_categories):
-    plot_top_10_least_revenue_categories(df=top_10_least_revenue_categories)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**F. Top 10 Revenue Categories Amount**""")
-    return
-
-
-@app.cell
-def _(plot_top_10_revenue_categories_amount, top_10_revenue_categories):
-    plot_top_10_revenue_categories_amount(df=top_10_revenue_categories)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**G. Top 10 Revenue by Categories**""")
-    return
-
-
-@app.cell
-def _(plot_top_10_revenue_categories, top_10_revenue_categories):
-    plot_top_10_revenue_categories(df=top_10_revenue_categories)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**H. Freight Value vs. Product Weight**""")
+    mo.md(r"""## Insights""")
     return
 
 
 @app.cell
 def _(
     freight_value_weight_relationship,
+    global_amount_order_status,
+    mo,
+    orders_per_day_and_holidays,
     plot_freight_value_weight_relationship,
+    plot_global_amount_order_status,
+    plot_order_amount_per_day_with_holidays,
+    plot_real_vs_predicted_delivered_time,
+    plot_revenue_by_month_year,
+    plot_revenue_per_state,
+    plot_top_10_least_revenue_categories,
+    plot_top_10_revenue_categories,
+    plot_top_10_revenue_categories_amount,
+    real_vs_estimated_delivery_time,
+    revenue_by_month_year,
+    revenue_per_state,
+    top_10_least_revenue_categories,
+    top_10_revenue_categories,
 ):
-    plot_freight_value_weight_relationship(df=freight_value_weight_relationship)
-    return
+    overview_tab = mo.vstack(
+        [
+            mo.md("### Global Order Status Overview"),
+            mo.hstack(
+                [
+                    global_amount_order_status,
+                    plot_global_amount_order_status(df=global_amount_order_status),
+                ]
+            ),
+        ]
+    )
+
+    revenue_tab = mo.vstack(
+        [
+            mo.md("### Revenue by Month and Year"),
+            mo.ui.table(revenue_by_month_year),
+            plot_revenue_by_month_year(df=revenue_by_month_year, year=2017),
+            mo.md("### Revenue by State"),
+            mo.ui.table(revenue_per_state),
+            plot_revenue_per_state(revenue_per_state),
+        ]
+    )
+
+    categories_tab = mo.vstack(
+        [
+            mo.md("### Top 10 Revenue Categories"),
+            mo.ui.table(top_10_revenue_categories),
+            plot_top_10_revenue_categories(top_10_revenue_categories),
+            plot_top_10_revenue_categories_amount(top_10_revenue_categories),
+            mo.md("### Bottom 10 Revenue Categories"),
+            mo.ui.table(top_10_least_revenue_categories),
+            plot_top_10_least_revenue_categories(top_10_least_revenue_categories),
+        ]
+    )
+
+    delivery_tab = mo.vstack(
+        [
+            mo.md("### Freight Value vs Product Weight"),
+            mo.ui.table(freight_value_weight_relationship),
+            plot_freight_value_weight_relationship(
+                freight_value_weight_relationship
+            ),
+            mo.md("### Real vs Estimated Delivery Time"),
+            mo.ui.table(real_vs_estimated_delivery_time),
+            plot_real_vs_predicted_delivered_time(
+                df=real_vs_estimated_delivery_time, year=2017
+            ),
+            mo.md("### Orders and Holidays"),
+            mo.ui.table(orders_per_day_and_holidays),
+            plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays),
+        ]
+    )
+    return categories_tab, delivery_tab, overview_tab, revenue_tab
 
 
 @app.cell
-def _(mo):
-    mo.md(r"""**I. Diffrence Between Deliver Estimated Date and Delivery Date**""")
-    return
-
-
-@app.cell
-def _(delivery_date_difference, plot_delivery_date_difference):
-    plot_delivery_date_difference(df=delivery_date_difference)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""**J. Order Amount per Day with Holidays**""")
-    return
-
-
-@app.cell
-def _(orders_per_day_and_holidays, plot_order_amount_per_day_with_holidays):
-    plot_order_amount_per_day_with_holidays(df=orders_per_day_and_holidays)
+def _(categories_tab, delivery_tab, mo, overview_tab, revenue_tab):
+    mo.ui.tabs(
+        {
+            "📊 Overview": overview_tab,
+            "💰 Revenue": revenue_tab,
+            "📦 Categories": categories_tab,
+            "🚚 Freight & Delivery": delivery_tab,
+        }
+    )
     return
 
 

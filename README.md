@@ -13,9 +13,19 @@ short_description: Extract, Load, Transform Pipeline applied to an E-Commerce
 
 ## Table of Contents
 
-1. [Stack](#stack)
+1. [Description](#1-description)
+2. [Stack](#2-stack)
 
-## 1. Stack
+## 1. Description
+
+This project analyzes e-commerce data from a Brazilian marketplace to explore key business metrics related to **revenue** and **delivery performance**. Using an interactive Marimo application, the analysis provides insights into:
+
+- **Revenue:** Annual revenue, popular product categories, and sales by state.
+- **Delivery:** Delivery performance, including time-to-delivery and its correlation with public holidays.
+
+The data pipeline processes information from [multiple CSV files](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and a [public API](https://date.nager.at/Api), storing and analyzing the results using Python. The final interactive report is presented as a Hugging Face Space built with Marimo.
+
+## 2. Stack
 
 - [Marimo](https://github.com/marimo-team/marimo): A Python library for building interactive dashboards.
 - [Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-config-reference): A platform for hosting and sharing interactive machine learning demos and applications
