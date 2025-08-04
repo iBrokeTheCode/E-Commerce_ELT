@@ -31,6 +31,12 @@ git lfs install
 
    ```bash
    git lfs track "olist.db"
+   git lfs track "*.png"
+   git lfs track "*.jpg"
+   git lfs track "*.csv"
+
+   # This adds patterns to a .gitattributes file. For exampple :
+   # *.png filter=lfs diff=lfs merge=lfs -text
    ```
 
 2. **Edit `.gitignore` **
@@ -54,6 +60,22 @@ git lfs install
 
    ```bash
    git push origin main
+   ```
+
+5. **(Optional) Fix Mistakes If You Added a Binary File the Wrong Way**
+
+   If you accidentally committed a binary file without LFS, you’ll need to:
+
+   ```bash
+   # Remove the file from Git history
+   git lfs track "*.png"                     # if not already
+   git rm --cached public/erd-schema.png     # remove from Git index
+   git add public/erd-schema.png             # re-add to index, now tracked via LFS
+   git commit -m "Re-add image using Git LFS"
+
+   # Rewrite history to remove the original large file
+   git filter-repo --path public/erd-schema.png --invert-paths
+   git push --force origin main
    ```
 
 ## 2. 🌊 Marimo: Code Display Behavior

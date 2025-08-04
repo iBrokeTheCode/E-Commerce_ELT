@@ -39,12 +39,6 @@ def _(mo):
     * Freight and delivery performance
     * Customer locations and product categories
     * Customer reviews and satisfaction
-
-    Additional geolocation data and a complementary **Marketing Funnel dataset** allow for multi-dimensional analysis—from first click to final delivery.
-
-    This anonymized dataset was provided by **Olist**, Brazil’s largest department store in online marketplaces.
-    Learn more at [olist.com](https://www.olist.com).
-
     """)
 
     erd_diagram = mo.md("""### Entity Relationship Diagram
