@@ -261,5 +261,10 @@ def _(categories_tab, delivery_tab, mo, overview_tab, revenue_tab):
     return
 
 
+@app.cell
+def _():
+    return
+
+
 if __name__ == "__main__":
     app.run()
