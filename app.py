@@ -207,35 +207,95 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
-    # 📌 TODO: Retrieve real data
+def _(
+    global_amount_order_status,
+    revenue_by_month_year,
+    top_10_revenue_categories,
+):
+    # 📌 RETRIEVE INSIGHTS VALUES
+
+    # [1]
+    total_2018 = revenue_by_month_year["Year2018"].sum()
+    total_2017 = revenue_by_month_year["Year2017"].sum()
+
+    # [2]
+    delivered = global_amount_order_status.loc[
+        global_amount_order_status["order_status"] == "delivered", "Amount"
+    ].values[0]
+
+    # Get total number of orders and delivery rate as a percentage string
+    total_orders = global_amount_order_status["Amount"].sum()
+    delivery_rate = delivered / total_orders
+    percentage = f"{delivery_rate:.1%}"  # e.g., '85.2%'
+
+    # [3]
+    # Uncompleted orders = total - delivered
+    uncompleted = total_orders - delivered
+    uncompleted_pct = f"{(uncompleted / total_orders) * 100:.1f}%"
+
+    # [4]
+    top_cat = top_10_revenue_categories.iloc[0]
+
+    cat_name = top_cat["Category"].replace("_", " ").title()
+    cat_num_orders = int(top_cat["Num_order"])
+    cat_revenue = top_cat["Revenue"]
+    return (
+        cat_name,
+        cat_num_orders,
+        cat_revenue,
+        delivered,
+        percentage,
+        total_2017,
+        total_2018,
+        uncompleted,
+        uncompleted_pct,
+    )
+
+
+@app.cell
+def _(
+    cat_name,
+    cat_num_orders,
+    cat_revenue,
+    delivered,
+    mo,
+    percentage,
+    total_2017,
+    total_2018,
+    uncompleted,
+    uncompleted_pct,
+):
+    # 📌 DISPLAY INSIGHTS
 
     st1 = mo.stat(
-        label="Total Revenue 2017",
+        label="Total Revenue 2018",
         bordered=True,
-        value=f"${2_000_000:,}",
-        caption=f"Previous year: ${1_500_000:,}",
-        direction="increase",
+        value=f"${total_2018:,.0f}",
+        caption=f"Previous year: ${total_2017:,.0f}",
+        direction="increase" if total_2018 > total_2017 else "decrease",
     )
+
     st2 = mo.stat(
         label="Successful Deliveries",
         bordered=True,
-        value=f"{1_280_700:,}",
-        caption="Review chart for more details",
+        value=f"{delivered:,}",
+        caption=f"{percentage} of total orders",
         direction="increase",
     )
+
     st3 = mo.stat(
         label="Uncompleted Orders",
         bordered=True,
-        value=f"{80_700:,}",
-        caption="Review chart for more details",
+        value=f"{uncompleted:,}",
+        caption=f"{uncompleted_pct} of total orders",
         direction="decrease",
     )
+
     st4 = mo.stat(
         label="Category with greater revenue",
         bordered=True,
-        value=f"{'bed_bath_table'.replace('_', ' ').title()}",
-        caption=f"${884_220:,}",
+        value=cat_name,
+        caption=f"{cat_num_orders:,} orders • Revenue: ${cat_revenue:,.0f}",
         direction="increase",
     )
 
@@ -436,7 +496,7 @@ def _(mo):
 def _(mo):
     mo.center(
         mo.md(
-            "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) · 🐱 [GitHub](https://github.com/iBrokeTheCode) · 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
+            "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) • 🐱 [GitHub](https://github.com/iBrokeTheCode) • 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
         )
     )
     return
