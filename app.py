@@ -79,27 +79,26 @@ def _(mo):
 def _():
     # 📌 IMPORT LIBRARIES AND PACKAGES
 
-    from pandas import DataFrame
     from pathlib import Path
+
+    from pandas import DataFrame
     from sqlalchemy import create_engine
 
     from src import config
     from src.extract import extract
     from src.load import load
-    from src.transform import QueryEnum, run_queries
-
     from src.plots import (
-        plot_revenue_by_month_year,
-        plot_real_vs_predicted_delivered_time,
+        plot_freight_value_weight_relationship,
         plot_global_amount_order_status,
+        plot_order_amount_per_day_with_holidays,
+        plot_real_vs_predicted_delivered_time,
+        plot_revenue_by_month_year,
         plot_revenue_per_state,
         plot_top_10_least_revenue_categories,
-        plot_top_10_revenue_categories_amount,
         plot_top_10_revenue_categories,
-        plot_freight_value_weight_relationship,
-        plot_delivery_date_difference,
-        plot_order_amount_per_day_with_holidays,
+        plot_top_10_revenue_categories_amount,
     )
+    from src.transform import QueryEnum, run_queries
     return (
         DataFrame,
         Path,
@@ -311,86 +310,6 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.md(r"""# 📋 Tables""")
-    return
-
-
-@app.cell
-def _(
-    freight_value_weight_relationship,
-    global_amount_order_status,
-    mo,
-    orders_per_day_and_holidays,
-    real_vs_estimated_delivery_time,
-    revenue_by_month_year,
-    revenue_per_state,
-    top_10_least_revenue_categories,
-    top_10_revenue_categories,
-):
-    overview_table_tab = mo.vstack(
-        align="center",
-        justify="center",
-        gap=2,
-        items=[
-            mo.center(mo.md("## Global Order Status Overview")),
-            global_amount_order_status,
-        ],
-    )
-    revenue_table_tab = mo.vstack(
-        align="center",
-        justify="center",
-        gap=2,
-        items=[
-            mo.center(mo.md("## Revenue by Month and Year")),
-            revenue_by_month_year,
-            mo.center(mo.md("## Revenue by State")),
-            revenue_per_state,
-        ],
-    )
-    categories_table_tab = mo.vstack(
-        align="center",
-        justify="center",
-        gap=2,
-        items=[
-            mo.center(mo.md("## Top 10 Revenue Categories")),
-            top_10_revenue_categories,
-            mo.center(mo.md("## Bottom 10 Revenue Categories")),
-            top_10_least_revenue_categories,
-        ],
-    )
-    delivery_table_tab = mo.vstack(
-        align="center",
-        justify="center",
-        gap=2,
-        items=[
-            mo.center(mo.md("## Freight Value vs Product Weight")),
-            freight_value_weight_relationship,
-            mo.center(mo.md("## Real vs Estimated Delivery Time")),
-            real_vs_estimated_delivery_time,
-            mo.center(mo.md("## Orders and Holidays")),
-            orders_per_day_and_holidays,
-        ],
-    )
-
-    mo.ui.tabs(
-        {
-            "📊 Overview": overview_table_tab,
-            "💰 Revenue": revenue_table_tab,
-            "📦 Categories": categories_table_tab,
-            "🚚 Freight & Delivery": delivery_table_tab,
-        }
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    mo.Html("<br><hr><br>")
-    return
-
-
-@app.cell
-def _(mo):
     mo.md(r"""# 📊 Charts""")
     return
 
@@ -458,13 +377,13 @@ def _(
         align="center",
         heights="equal",
         items=[
-            mo.center(mo.md("## Freight Value vs Product Weight")),
-            plot_freight_value_weight_relationship(
-                freight_value_weight_relationship
-            ),
             mo.center(mo.md("## Real vs Estimated Delivery Time")),
             plot_real_vs_predicted_delivered_time(
                 df=real_vs_estimated_delivery_time, year=2017
+            ),
+            mo.center(mo.md("## Freight Value vs Product Weight")),
+            plot_freight_value_weight_relationship(
+                freight_value_weight_relationship
             ),
             mo.center(mo.md("## Orders and Holidays")),
             plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays),
@@ -498,6 +417,80 @@ def _(mo):
         mo.md(
             "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) • 🐱 [GitHub](https://github.com/iBrokeTheCode) • 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
         )
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""# 📋 Tables""")
+    return
+
+
+@app.cell
+def _(
+    freight_value_weight_relationship,
+    global_amount_order_status,
+    mo,
+    orders_per_day_and_holidays,
+    real_vs_estimated_delivery_time,
+    revenue_by_month_year,
+    revenue_per_state,
+    top_10_least_revenue_categories,
+    top_10_revenue_categories,
+):
+    overview_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Global Order Status Overview")),
+            global_amount_order_status,
+        ],
+    )
+    revenue_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Revenue by Month and Year")),
+            revenue_by_month_year,
+            mo.center(mo.md("## Revenue by State")),
+            revenue_per_state,
+        ],
+    )
+    categories_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Top 10 Revenue Categories")),
+            top_10_revenue_categories,
+            mo.center(mo.md("## Bottom 10 Revenue Categories")),
+            top_10_least_revenue_categories,
+        ],
+    )
+    delivery_table_tab = mo.vstack(
+        align="center",
+        justify="center",
+        gap=2,
+        items=[
+            mo.center(mo.md("## Real vs Estimated Delivery Time")),
+            real_vs_estimated_delivery_time,
+            mo.center(mo.md("## Freight Value vs Product Weight")),
+            freight_value_weight_relationship,
+            mo.center(mo.md("## Orders and Holidays")),
+            orders_per_day_and_holidays,
+        ],
+    )
+
+    mo.ui.tabs(
+        {
+            "📊 Overview": overview_table_tab,
+            "💰 Revenue": revenue_table_tab,
+            "📦 Categories": categories_table_tab,
+            "🚚 Freight & Delivery": delivery_table_tab,
+        }
     )
     return
 
