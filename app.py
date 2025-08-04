@@ -17,25 +17,66 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md(r"""# 📦 Brazilian E-Commerce Dashboard""")
+    mo.center(mo.md("# 📦 Brazilian E-Commerce Dashboard"))
     return
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        r"""
-    This interactive dashboard explores insights from the [Brazilian e-commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and the [Public Holiday API](https://date.nager.at/Api) :
+    mo.Html("<br><hr><br>")
+    return
 
-    - Sales performance by category and state
-    - Delivery efficiency
-    - Seasonal trends and holidays impact
 
-    _Built with [Marimo](https://marimo.io)._
+@app.cell
+def _(mo):
+    description = mo.md(r"""### 🛍️ About the Dataset   
 
-    > 💡 **Want a step-by-step walkthrough instead?**   
-    > Check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)
-    """
+    This dashboard presents insights from the real-world [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), which includes data on over **100,000 orders** placed between **2016 and 2018** across various online marketplaces in Brazil. It also integrates data from the [Public Holiday API](https://date.nager.at/Api) to analyze sales performance during national holidays.
+
+    The dataset offers a detailed view of the e-commerce experience, including:
+
+    * Order status, prices, and payment types
+    * Freight and delivery performance
+    * Customer locations and product categories
+    * Customer reviews and satisfaction
+
+    Additional geolocation data and a complementary **Marketing Funnel dataset** allow for multi-dimensional analysis—from first click to final delivery.
+
+    This anonymized dataset was provided by **Olist**, Brazil’s largest department store in online marketplaces.
+    Learn more at [olist.com](https://www.olist.com).
+
+    """)
+
+    erd_diagram = mo.md("""### Entity Relationship Diagram
+    <img src="public/erd-schema.png" />
+    """)
+
+    stack = mo.md(r"""### 🧑‍💻 Stack
+    - [Marimo](https://github.com/marimo-team/marimo): A Python library for building interactive dashboards.
+    - [Hugging Face Spaces](https://huggingface.co/docs/hub/spaces-config-reference): A platform for hosting and sharing interactive machine learning demos and applications.
+    - [Pandas](https://pandas.pydata.org/): A Python library for data manipulation and analysis.
+    - [Plotly](https://plotly.com/python/): A Python library for interactive data visualization.
+    - [Matplotlib](https://matplotlib.org/): A Python library for creating static, animated, and interactive visualizations.
+    - [Seaborn](https://seaborn.pydata.org/): A Python library for creating statistical graphics.
+    - [SQLAlchemy](https://www.sqlalchemy.org/): A Python library for interacting with databases.
+    - [Requests](https://requests.readthedocs.io/en/latest/): A Python library for making HTTP requests.
+    - [Ruff](https://github.com/charliermarsh/ruff): An extremely fast Python linter and code formatter, written in Rust.
+    - [uv](https://github.com/astral-sh/uv): An extremely fast Python package and project manager, written in Rust.
+
+    """)
+
+    mo.carousel(items=[description, erd_diagram, stack])
+    return
+
+
+@app.cell
+def _(mo):
+    mo.callout(
+        kind="info",
+        value=mo.md(
+            """💡 **Want a step-by-step walkthrough instead?**   
+    Check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)""",
+        ),
     )
     return
 
@@ -387,6 +428,22 @@ def _(categories_tab, delivery_tab, mo, overview_tab, revenue_tab):
             "📦 Categories": categories_tab,
             "🚚 Freight & Delivery": delivery_tab,
         }
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.Html("<br><hr><br>")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.center(
+        mo.md(
+            "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) · 🐱 [GitHub](https://github.com/iBrokeTheCode) · 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
+        )
     )
     return
 
