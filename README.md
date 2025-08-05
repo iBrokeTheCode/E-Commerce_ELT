@@ -1,4 +1,4 @@
-<!-- ---
+---
 title: E-Commerce ELT
 emoji: 🍃
 colorFrom: indigo
@@ -7,7 +7,7 @@ sdk: docker
 pinned: true
 license: mit
 short_description: Extract, Load, Transform Pipeline applied to an E-Commerce
---- -->
+---
 
 # E-Commerce ELT Pipeline
 
