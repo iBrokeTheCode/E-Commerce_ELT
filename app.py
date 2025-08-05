@@ -64,18 +64,6 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
-    mo.callout(
-        kind="info",
-        value=mo.md(
-            """💡 **Want a step-by-step walkthrough instead?**   
-    Check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)""",
-        ),
-    )
-    return
-
-
-@app.cell
 def _():
     # 📌 IMPORT LIBRARIES AND PACKAGES
 
@@ -266,7 +254,7 @@ def _(
 ):
     # 📌 DISPLAY INSIGHTS
 
-    st1 = mo.stat(
+    stat1 = mo.stat(
         label="Total Revenue 2018",
         bordered=True,
         value=f"${total_2018:,.0f}",
@@ -274,7 +262,7 @@ def _(
         direction="increase" if total_2018 > total_2017 else "decrease",
     )
 
-    st2 = mo.stat(
+    stat2 = mo.stat(
         label="Successful Deliveries",
         bordered=True,
         value=f"{delivered:,}",
@@ -282,7 +270,7 @@ def _(
         direction="increase",
     )
 
-    st3 = mo.stat(
+    stat3 = mo.stat(
         label="Uncompleted Orders",
         bordered=True,
         value=f"{uncompleted:,}",
@@ -290,7 +278,7 @@ def _(
         direction="decrease",
     )
 
-    st4 = mo.stat(
+    stat4 = mo.stat(
         label="Category with greater revenue",
         bordered=True,
         value=cat_name,
@@ -298,7 +286,7 @@ def _(
         direction="increase",
     )
 
-    mo.hstack([st1, st2, st3, st4], widths="equal", gap=1)
+    mo.hstack([stat1, stat2, stat3, stat4], widths="equal", gap=1)
     return
 
 
@@ -413,16 +401,6 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    mo.center(
-        mo.md(
-            "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) • 🐱 [GitHub](https://github.com/iBrokeTheCode) • 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
-        )
-    )
-    return
-
-
-@app.cell
-def _(mo):
     mo.md(r"""# 📋 Tables""")
     return
 
@@ -491,6 +469,35 @@ def _(
             "📦 Categories": categories_table_tab,
             "🚚 Freight & Delivery": delivery_table_tab,
         }
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.callout(
+        kind="info",
+        value=mo.md(
+            """💡 **Want a step-by-step walkthrough instead?**   
+    Check the Jupyter notebook version here: 👉 [Jupyter notebook](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT/blob/main/tutorial_app.ipynb)""",
+        ),
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.Html("<br><hr><br>")
+
+    return
+
+
+@app.cell
+def _(mo):
+    mo.center(
+        mo.md(
+            "**Connect with me:** 💼 [Linkedin](https://www.linkedin.com/in/alex-turpo/) • 🐱 [GitHub](https://github.com/iBrokeTheCode) • 🤗 [Hugging Face](https://huggingface.co/iBrokeTheCode)"
+        )
     )
     return
 
