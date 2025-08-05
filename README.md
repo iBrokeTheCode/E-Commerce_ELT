@@ -1,4 +1,4 @@
----
+<!-- ---
 title: E-Commerce ELT
 emoji: 🍃
 colorFrom: indigo
@@ -7,7 +7,7 @@ sdk: docker
 pinned: true
 license: mit
 short_description: Extract, Load, Transform Pipeline applied to an E-Commerce
----
+--- -->
 
 # E-Commerce ELT Pipeline
 
@@ -15,15 +15,21 @@ short_description: Extract, Load, Transform Pipeline applied to an E-Commerce
 
 1. [Description](#1-description)
 2. [Stack](#2-stack)
+3. [Entity Relationship Diagram](#3-entity-relationship-diagram)
 
 ## 1. 🛍️ Description
 
-This project analyzes e-commerce data from a Brazilian marketplace to explore key business metrics related to **revenue** and **delivery performance**. Using an interactive Marimo application, the analysis provides insights into:
+This dashboard presents insights from the real-world [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), which includes data on over **100,000 orders** placed between **2016 and 2018** across various online marketplaces in Brazil. It also integrates data from the [Public Holiday API](https://date.nager.at/Api) to analyze sales performance during national holidays.
 
-- **Revenue:** Annual revenue, popular product categories, and sales by state.
-- **Delivery:** Delivery performance, including time-to-delivery and its correlation with public holidays.
+The dataset offers a detailed view of the e-commerce experience, including:
 
-The data pipeline processes information from [multiple CSV files](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and a [public API](https://date.nager.at/Api), storing and analyzing the results using Python. The final interactive report is presented as a Hugging Face Space built with Marimo.
+- Order status, prices, and payment types
+- Freight and delivery performance
+- Customer locations and product categories
+- Customer reviews and satisfaction
+
+> [!IMPORTANT]  
+> Check the Dashboard deployed on Hugging Face Spaces: [E-Commerce ELT](https://huggingface.co/spaces/iBrokeTheCode/E-Commerce_ELT)
 
 ## 2. 🧑‍💻 Stack
 
@@ -37,3 +43,7 @@ The data pipeline processes information from [multiple CSV files](https://www.ka
 - [Requests](https://requests.readthedocs.io/en/latest/): A Python library for making HTTP requests.
 - [Ruff](https://github.com/charliermarsh/ruff): An extremely fast Python linter and code formatter, written in Rust.
 - [uv](https://github.com/astral-sh/uv): An extremely fast Python package and project manager, written in Rust.
+
+## 3. Entity Relationship Diagram
+
+![ERD](./public/erd-schema.png)
